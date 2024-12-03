@@ -1,0 +1,5 @@
+pyjwt[crypto]
+sqlmodel
+fastapi
+mongoengine
+uvicorn[standard]
