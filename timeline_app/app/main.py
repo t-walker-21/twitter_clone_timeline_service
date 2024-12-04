@@ -37,6 +37,7 @@ def generate_timeline(session: Session = Depends(get_session), current_user: str
     for tweet in TweetDocument.objects(user_id__in=people_followed_str):
         tweets.append(json.loads(tweet.to_json()))
 
+    #TODO: Move this to the DB call
     tweets.sort(key=lambda x: x['created_at']['$date'], reverse=True)
         
     return {'tweets': tweets}
