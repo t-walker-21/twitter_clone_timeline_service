@@ -1,3 +1,4 @@
+psycopg2-binary
 pyjwt[crypto]
 sqlmodel
 fastapi
