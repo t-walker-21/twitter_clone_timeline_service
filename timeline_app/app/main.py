@@ -25,18 +25,16 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 def generate_timeline(session: Session = Depends(get_session), current_user: str = Depends(get_current_user)):
 
     #print (f"current user: {current_user['sub']}")
-    statement = select(Follower).where(Follower.follower_id == current_user['sub'])
-    results = session.exec(statement)
-    people_followed = []
-    for result in results:
-        people_followed.append(str(result.followee_id))
+    statement = select(Follower.followee_id).where(Follower.follower_id == current_user['sub'])
+    people_followed = session.exec(statement).all()
+    people_followed_str = [str(person) for person in people_followed]
         
-    #print (response)
+    #print (people_followed)
 
     tweets = []
-    for followee in people_followed:
-        for tweet in TweetDocument.objects(user_id=followee):
-        
-            tweets.append(json.loads(tweet.to_json()))
+    #for followee in people_followed:
+        #print (f"searching for tweets for {followee}")
+    for tweet in TweetDocument.objects(user_id__in=people_followed_str):
+        tweets.append(json.loads(tweet.to_json()))
         
     return {'tweets': tweets}
